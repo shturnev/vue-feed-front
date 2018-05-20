@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <title></title>
+  <link rel="shortcut icon" href=""/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href=""/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<style>
+  .fade_rotate-enter-active{
+    animation: fade_rotate-in 5s ease-in ;
+  }
+
+  .fade_rotate-leave-active{
+    animation: fade_rotate-out 5s ease-in ;
+  }
+
+  @keyframes fade_rotate-in {
+    from{
+      transform: rotate(0deg);
+      opacity: 0;
+    }
+    to{
+      transform: rotate(360deg);
+      opacity: 1;
+    }
+  }
+  @keyframes fade_rotate-out {
+    from{
+      transform: rotate(360deg);
+      opacity: 1;
+    }
+    to{
+      transform: rotate(0deg);
+      opacity: 0;
+    }
+  }
+
+
+</style>
+
+<body>
+
+<div id="app">
+  <div v-html="message"></div>
+  <input type="text" v-model="message">
+  <div>{{message | uppercase }}</div>
+  <div>{{computed_brand}}</div>
+  <div>
+    <button @click="get_alert">get alert</button>
+    <a href="#1111" @click.prevent="get_alert($event, 'dsdsdsd')">get alert</a>
+  </div>
+
+  <ul>
+    <li v-for="item, index in brands">{{index}} - {{item}}</li>
+  </ul>
+
+
+  <div>
+    <button @click="show = !show" v-text="show ? 'скрыть' : 'показать'"></button>
+    <br>
+    <transition name="fade_rotate">
+      <img v-if="show" src="http://placehold.it/255x230/" alt="">
+    </transition>
+  </div>
+</div>
+
+<!-- MVVM -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      message: 'Мои кроссовки фирмы ',
+      brand: "nike",
+      brands: ["nike", "abibas", "nb", "etc"],
+      show: true
+    },
+    filters: {
+      uppercase: function (val) {
+        return val.toUpperCase();
+      }
+    },
+    computed:{
+      computed_brand: function () {
+        return this.message + " " + this.brand
+      }
+    },
+    methods:{
+      get_alert: function (e, e2) {
+        console.log(e, e2);
+        alert("Hello");
+      }
+    },
+    created: function () {
+      console.log("created");
+    }
+  })
+
+
+</script>
+</body>
+</html>
