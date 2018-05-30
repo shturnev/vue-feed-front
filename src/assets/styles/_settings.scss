@@ -4,9 +4,4 @@ $bgc: #eaeee9;
 $green: #497b2b;
 $green_light: lighten($green, 15%);
 
-@for $i from 1 through 55{
-  .mt-#{$i}{
-    margin-top: $i + px;
-  }
-}
 
