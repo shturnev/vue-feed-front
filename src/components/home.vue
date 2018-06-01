@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{$store.state.ttt}}
     <div style="height: 100px;"></div>
     <searchCont />
     <div style="height: 100px;"></div>

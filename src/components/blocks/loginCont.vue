@@ -1,5 +1,9 @@
 <template>
   <div class="login-cont">
+
+    {{$store.state.ttt}}
+
+
     <div :class="show ? 'form-cont show' : 'form-cont'">
 
       <transition
@@ -9,9 +13,9 @@
         leave-active-class="animated zoomOut"
       >
         <div v-if="!login" key="one">
-          <input type="text" placeholder="Email">
-          <input type="text" placeholder="Password">
-          <button @click="login = true">Login</button>
+          <input v-model="email" type="text" placeholder="Email">
+          <input v-model="pass" type="password" placeholder="Password">
+          <button @click="get_login">Login</button>
         </div>
         <div v-else key="two">
           <a href="#"><i class="material-icons">exposure_plus_1</i></a>
@@ -31,7 +35,29 @@
     data(){
       return {
         show: false,
-        login: false
+        login: false,
+        email: null,
+        pass: null
+      }
+    },
+    methods: {
+      get_login(){
+        let url = "https://vue-feed-api.makenow.com.ua/api/";
+
+        let body = {
+          method_name: "client_get",
+          m: 2,
+          email: this.email,
+          pass: this.pass,
+          public_key: "fd0defd4701f2d1e18a9a311a0f2339035f0ba6439eee009ec947000adbcf67a"
+        }
+
+        this.$http.post(url, body).then(res => {
+          console.log("всё ок", res);
+        }, err => {
+          console.log("всё плохо", err);
+        });
+
       }
     }
   }
