@@ -18,6 +18,10 @@ export default new Router({
       component: add_edit_note
     },
     {
+      path: '/edit/:id',
+      component: add_edit_note
+    },
+    {
       path: '/*',
       component: home
     }
