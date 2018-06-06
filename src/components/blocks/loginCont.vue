@@ -18,8 +18,8 @@
           <button @click="get_login">Login</button>
         </div>
         <div v-else key="two">
-          <a href="#"><i class="material-icons">exposure_plus_1</i></a>
-          <button class="mt-10" @click="login = false">Logout</button>
+          <router-link to="/add"><i class="material-icons">exposure_plus_1</i></router-link>
+          <button class="mt-10" @click="logout">Logout</button>
         </div>
       </transition>
     </div>
@@ -35,29 +35,44 @@
     data(){
       return {
         show: false,
-        login: false,
         email: null,
         pass: null
       }
     },
+    computed:{
+      login(){
+        return this.$store.state.private_key;
+      }
+    },
     methods: {
       get_login(){
-        let url = "https://vue-feed-api.makenow.com.ua/api/";
 
         let body = {
           method_name: "client_get",
           m: 2,
           email: this.email,
           pass: this.pass,
-          public_key: "fd0defd4701f2d1e18a9a311a0f2339035f0ba6439eee009ec947000adbcf67a"
         }
 
-        this.$http.post(url, body).then(res => {
-          console.log("всё ок", res);
-        }, err => {
-          console.log("всё плохо", err);
+        this.$store.dispatch("api", body).then(res => {
+          console.log(res);
+          if(!res.response){
+            alert('Такого пользователя нет');
+            return false;
+          }
+          let key = res.response[0].private_key;
+          this.$store.commit('set', ['private_key', key]);
+          localStorage.setItem('private_key', key);
+        }, err =>{
+          alert(err);
+          localStorage.removeItem('private_key');
+          this.$store.commit('set', ['private_key', null]);
         });
 
+      },
+      logout(){
+        localStorage.removeItem('private_key');
+        this.$store.commit('set', ['private_key', null]);
       }
     }
   }
