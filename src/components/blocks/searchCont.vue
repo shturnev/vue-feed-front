@@ -1,13 +1,37 @@
 <template>
   <div class="search-cont">
-    <input type="text" placeholder="search">
-    <button><i class="material-icons">search</i></button>
+    <input type="text" placeholder="search"
+           v-model="search_str" @keyup.enter="set_search">
+    <button @click="set_search"><i class="material-icons">search</i></button>
   </div>
 </template>
 
 <script>
   export default {
-    name: "search-cont"
+    name: "search-cont",
+    data(){
+      return {
+        search_str: null
+      }
+    },
+    computed: {
+      search:{
+        get(){
+          return this.$store.state.search;
+        },
+        set(data){
+          this.$store.commit('set', ['search', data]);
+        }
+      }
+    },
+    methods: {
+      set_search(){
+          this.search = this.search_str;
+      }
+    },
+    created(){
+      this.search_str = this.search;
+    }
   }
 </script>
 

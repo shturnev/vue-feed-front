@@ -5,7 +5,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-   private_key: localStorage.getItem("private_key") ? localStorage.getItem("private_key") : null
+   private_key: localStorage.getItem("private_key") ? localStorage.getItem("private_key") : null,
+   search: null,
   },
   mutations: {
     /**
