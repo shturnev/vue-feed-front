@@ -1,27 +1,24 @@
 <template>
   <div>
-    {{$store.state.ttt}}
     <div style="height: 100px;"></div>
     <searchCont />
     <div style="height: 100px;"></div>
 
 
     <ul class="notes" v-if="notes">
-      <li v-for="note, index in notes" :key="note.id">
+      <li v-for="note, index in notes">
         <a href="#" class="title">
           {{note.title}}
-          <sup v-if="note.protected">
-            <i class="material-icons" style="font-size: 18px;">https</i>
-          </sup>
+          <sup v-if="note.protected"><i class="material-icons" style="font-size: 18px;">https</i></sup>
         </a>
-        <div :class="note.tymbler ? 'item-cont' : `item-cont closed`" v-html="note.text"></div>
-        <div :class="note.tymbler ? 'tymbler active' : 'tymbler' " @click="set_tymbler(index)">
+        <div :class="note.tymbler ? 'item-cont' : 'item-cont closed'" v-html="note.text"></div>
+        <div :class="note.tymbler ? 'tymbler active' : 'tymbler'" @click="set_tymbler(index)">
           <svg xmlns="http://www.w3.org/2000/svg">
             <line x1="0" y1="0" x2="50%" y2="28"></line>
             <line x1="50%" y1="28" x2="100%" y2="0"></line>
           </svg>
         </div>
-        <div class="adm-buttons mt-15">
+        <div class="adm-buttons mt-15" v-if="auth">
           <router-link :to="`/edit/${note.id}`"><i class="material-icons">mode_edit</i></router-link>
           <a href="#"><i class="material-icons">delete</i></a>
           <a href="#"><i class="material-icons">flight</i></a>
@@ -45,29 +42,24 @@
         stack: null
       }
     },
-    computed:{
-      auth(){
-        return this.$store.state.private_key;
-      },
-      search(){
-        return this.$store.state.search;
-      }
+    computed: {
+      search(){ return this.$store.state.search; },
+      auth(){ return this.$store.state.private_key; }
     },
     watch:{
-      auth: 'get_notes',
       search: 'get_notes',
+      auth: 'get_notes',
     },
-    methods:{
+    methods: {
       get_notes(){
         let body = {
           method_name: "feed_get",
           m: 2,
-          limit: 35,
+          limit: 2,
           page: this.$route.query.page,
           private_key: this.$store.state.private_key,
-          search: this.$store.state.search
+          search: this.search
         }
-
 
         this.$store.dispatch("api", body).then(res => {
           if(!res.response){
@@ -85,13 +77,12 @@
       },
       set_tymbler(i){
         let val = !this.notes[i].tymbler;
-        this.$set(this.notes[i], "tymbler", val);
+        this.$set(this.notes[i], 'tymbler', val);
       }
     },
     created(){
       this.get_notes();
     }
-
   }
 </script>
 
@@ -156,7 +147,6 @@
         &:hover{
           opacity: 1;
         }
-
         svg{
           flex: 1;
           height: inherit;

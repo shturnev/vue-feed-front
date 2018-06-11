@@ -1,9 +1,6 @@
 <template>
   <div class="login-cont">
 
-    {{$store.state.ttt}}
-
-
     <div :class="show ? 'form-cont show' : 'form-cont'">
 
       <transition

@@ -8,7 +8,7 @@
 
     <br>
     <br>
-    <switches v-model="protected" type-bold="true" :color="protected ? 'green' : 'red'"></switches>
+    <switches v-model="protected" type-bold="true" :color="!protected ? 'green' : 'red'"></switches>
 
     <br><br>
     <vue-ckeditor v-model="text"></vue-ckeditor>

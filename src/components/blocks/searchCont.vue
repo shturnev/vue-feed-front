@@ -1,7 +1,6 @@
 <template>
   <div class="search-cont">
-    <input type="text" placeholder="search"
-           v-model="search_str" @keyup.enter="set_search">
+    <input @keyup.enter="set_search" type="text" placeholder="search" v-model="search_str">
     <button @click="set_search"><i class="material-icons">search</i></button>
   </div>
 </template>
@@ -10,11 +9,11 @@
   export default {
     name: "search-cont",
     data(){
-      return {
+      return{
         search_str: null
       }
     },
-    computed: {
+    computed:{
       search:{
         get(){
           return this.$store.state.search;
@@ -26,7 +25,7 @@
     },
     methods: {
       set_search(){
-          this.search = this.search_str;
+        this.search = this.search_str;
       }
     },
     created(){
