@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'
 import add_edit_note from '../components/add_edit_note'
+import note from '../components/note'
 
 Vue.use(Router)
 
@@ -20,6 +21,10 @@ export default new Router({
     {
       path: '/edit/:id',
       component: add_edit_note
+    },
+    {
+      path: '/:id',
+      component: note
     },
     {
       path: '/*',

@@ -7,10 +7,10 @@
 
     <ul class="notes" v-if="notes">
       <li v-for="note, index in notes">
-        <a href="#" class="title">
-          {{note.title}}
+        <router-link :to="`/${note.id}`" class="title">
+          {{note.title ? note.title : '***'}}
           <sup v-if="note.protected"><i class="material-icons" style="font-size: 18px;">https</i></sup>
-        </a>
+        </router-link>
         <div :class="note.tymbler ? 'item-cont' : 'item-cont closed'" v-html="note.text"></div>
         <div :class="note.tymbler ? 'tymbler active' : 'tymbler'" @click="set_tymbler(index)">
           <svg xmlns="http://www.w3.org/2000/svg">
@@ -20,11 +20,17 @@
         </div>
         <div class="adm-buttons mt-15" v-if="auth">
           <router-link :to="`/edit/${note.id}`"><i class="material-icons">mode_edit</i></router-link>
-          <a href="#"><i class="material-icons">delete</i></a>
-          <a href="#"><i class="material-icons">flight</i></a>
+          <a href="" @click.prevent="delete_note(index)"><i class="material-icons">delete</i></a>
+          <a href="" @click.prevent="set_up(index)"><i class="material-icons">flight</i></a>
         </div>
       </li>
     </ul>
+
+    <div style="height: 100px;"></div>
+
+    <div style="text-align: center;" v-if="stack">
+      <pagination :stack="stack" url="/" />
+    </div>
 
 
   </div>
@@ -32,10 +38,11 @@
 
 <script>
   import searchCont from './blocks/searchCont';
+  import pagination from './blocks/pagination';
 
   export default {
     name: "home",
-    components: {searchCont},
+    components: {searchCont, pagination},
     data(){
       return {
         notes: null,
@@ -44,11 +51,13 @@
     },
     computed: {
       search(){ return this.$store.state.search; },
-      auth(){ return this.$store.state.private_key; }
+      auth(){ return this.$store.state.private_key; },
+      page(){ return this.$route.query.page; }
     },
     watch:{
       search: 'get_notes',
       auth: 'get_notes',
+      page: 'get_notes',
     },
     methods: {
       get_notes(){
@@ -78,7 +87,42 @@
       set_tymbler(i){
         let val = !this.notes[i].tymbler;
         this.$set(this.notes[i], 'tymbler', val);
-      }
+      },
+      delete_note(i){
+        if(!confirm("Удалить?")){ return false; }
+
+        let body = {
+          method_name: "feed_delete",
+          private_key: this.auth,
+          id: this.notes[i].id
+        }
+
+        this.$store.dispatch("api", body).then(res => {
+          if(res.response){
+            this.notes.splice(i, 1);
+          }
+        }, err => {
+          alert(err)
+        });
+      },
+      set_up(i){
+        if(!confirm("Поднять?")){ return false; }
+
+        let body = {
+          method_name: "feed_up",
+          private_key: this.auth,
+          id: this.notes[i].id
+        }
+
+        this.$store.dispatch("api", body).then(res => {
+          if(res.response){
+            this.get_notes()
+          }
+        }, err => {
+          alert(err)
+        });
+      },
+
     },
     created(){
       this.get_notes();
@@ -97,7 +141,7 @@
     &>li{
       .title{
         font-size: 26px;
-        color: green;
+        color: $green;
         display:block;
         margin-bottom: 15px;
 
