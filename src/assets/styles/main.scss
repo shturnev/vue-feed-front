@@ -1,0 +1,32 @@
+@charset "utf-8";
+@import "settings";
+@import "helpers";
+
+html,body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  background-color: $bgc;
+}
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .return-link{
+    font-size: 13px;
+    color: $green;
+
+    i{
+      font-size: 14px;
+    }
+    &:hover{
+      color: $green_light;
+    }
+  }
+}
