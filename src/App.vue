@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <loginCont />
-    <router-view/>
+
+    <transition mode="out-in"
+                duration="300"
+                leave-active-class="animated fadeOut" enter-active-class="animated fadeIn">
+     <router-view/>
+    </transition>
+
   </div>
 </template>
 

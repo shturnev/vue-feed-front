@@ -70,6 +70,8 @@
       logout(){
         localStorage.removeItem('private_key');
         this.$store.commit('set', ['private_key', null]);
+
+        this.$router.push("/")
       }
     }
   }
